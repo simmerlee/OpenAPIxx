@@ -1,0 +1,11 @@
+.o
+.obj
+.lib
+.a
+.dll
+.so
+.swp
+.vs
+Debug
+Release
+.sdf
