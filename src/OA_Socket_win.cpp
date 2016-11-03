@@ -20,6 +20,48 @@ inline string ntop(int family, void* addr)
 	return string(buf);
 }
 
+unsigned long long bswap64(unsigned long long n)
+{
+    unsigned long long r;
+    int i = 0, j = 7;
+    char *p1 = (char *)&n;
+    char *p2 = (char *)&r;
+    while (i < 8)
+        p2[i++] = p1[j--];
+    return r;
+}
+
+union ByteOrderUnion
+{
+    unsigned int data1;
+    char data2[4];
+};
+
+class ByteOrderUnionData
+{
+public:
+    ByteOrderUnionData()
+    {
+        data.data2[0] = 0x00;
+        data.data2[1] = 0x00;
+        data.data2[2] = 0x00;
+        data.data2[3] = 0x01;
+    }
+    ByteOrderUnion data;
+};
+
+namespace
+{
+    ByteOrderUnionData byteOrderUnionData;
+}
+
+class ByteOrder
+{
+public:
+    static bool IsBigEndian() { return byteOrderUnionData.data.data1 == 1; }
+    static bool IsLittleEndian() { return byteOrderUnionData.data.data1 != 1; }
+};
+
 class WindowsWSA
 {
 public:
@@ -285,6 +327,19 @@ int OpenAPI::Socket::getLastError() const
 	return m_errno;
 }
 
+int OpenAPI::Socket::getSocketName(unsigned int & port)
+{
+    struct sockaddr_in addr;
+    int addrLen = sizeof(addr);
+    if (getsockname(m_socketFd, (struct sockaddr*)&addr, &addrLen) == -1)
+    {
+        m_errno = WSAGetLastError();
+        return -1;
+    }
+    port = ntohs(addr.sin_port);
+    return 0;
+}
+
 void OpenAPI::Socket::setSocketFd(int socketFd)
 {
 	m_socketFd = socketFd;
@@ -320,6 +375,30 @@ int OpenAPI::Socket::Select(SocketFdSet* readSet,
             *readyFdCounts = ret;
         return 0;
     }
+}
+
+unsigned short OpenAPI::Socket::ntoh16(unsigned short num) {return ntohs(num);}
+unsigned short OpenAPI::Socket::hton16(unsigned short num) {return htons(num);}
+unsigned int OpenAPI::Socket::ntoh32(unsigned int num) { return ntohl(num); }
+unsigned int OpenAPI::Socket::hton32(unsigned int num) { return htonl(num); }
+
+inline unsigned long long OpenAPI::Socket::ntoh64(unsigned long long num)
+{
+    if (ByteOrder::IsLittleEndian() == true)
+    {
+        unsigned long long temp;
+        char* pi = reinterpret_cast<char*>(&num);
+        char* pj = reinterpret_cast<char*>(&temp);
+        for (unsigned i = 0, j = 7; i < 8; i++, j--)
+            pj[j] = pi[i];
+        return temp;
+    }
+    return num;
+}
+
+unsigned long long OpenAPI::Socket::hton64(unsigned long long num)
+{
+    return ntoh64(num);
 }
 
 OpenAPI::TCPSocket::TCPSocket() {}

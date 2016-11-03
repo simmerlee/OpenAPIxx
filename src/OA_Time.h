@@ -19,7 +19,7 @@ public:
 	int toTimeval(timeval* tv) const;
 
     static Time CurrentLocalTime();
-    static Time TickCount64();
+    static unsigned long long TickCount64();
     static void Sleep(unsigned second);
     static void Msleep(unsigned millisecond);
 	static int SetTimeval(unsigned millisecond, timeval* tv);
@@ -27,6 +27,8 @@ private:
     unsigned long long m_ms;
 };
 
-}
+}// namespace
+
+typedef OpenAPI::Time OATime;
 
 #endif//_OPENAPI_TIME_H_

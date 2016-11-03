@@ -1,4 +1,4 @@
-#ifndef _OPENAPI_SOCKET_H_
+﻿#ifndef _OPENAPI_SOCKET_H_
 #define _OPENAPI_SOCKET_H_
 
 #include <string>
@@ -41,6 +41,13 @@ public:
 	void setSocketFd(int socketFd);
 	int getSocketFd() const;
 	int getLastError() const;
+    int getSocketName(unsigned int& port);
+    static unsigned short ntoh16(unsigned short num);
+    static unsigned short hton16(unsigned short num);
+    static unsigned int ntoh32(unsigned int num);
+    static unsigned int hton32(unsigned int num);
+    static unsigned long long ntoh64(unsigned long long num);
+    static unsigned long long hton64(unsigned long long num);
 
     static int Select(
         SocketFdSet* readSet, 
@@ -75,6 +82,10 @@ public:
 };
 
 }// namespace OpenAPI
+
+typedef OpenAPI::Socket OASocket;
+typedef OpenAPI::TCPSocket OATCPSocket;
+typedef OpenAPI::UDPSocket OAUDPSocket;
 
 #endif//_OPENAPI_SOCKET_H_
 

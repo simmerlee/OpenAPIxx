@@ -28,5 +28,7 @@ private:
 
 }// OpenAPI
 
+typedef OpenAPI::Thread OAThread;
+
 #endif//_OPENAPI_THREAD_H_
 

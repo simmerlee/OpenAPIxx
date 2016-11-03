@@ -21,4 +21,6 @@ private:
 
 }
 
+typedef OpenAPI::Lock OALock;
+
 #endif//_OPENAPI_LOCK_H_

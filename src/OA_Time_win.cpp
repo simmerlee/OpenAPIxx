@@ -63,9 +63,9 @@ OpenAPI::Time OpenAPI::Time::CurrentLocalTime()
     return Time(ms);
 }
 
-OpenAPI::Time OpenAPI::Time::TickCount64()
+unsigned long long OpenAPI::Time::TickCount64()
 {
-    return Time(GetTickCount64());
+    return GetTickCount64();
 }
 
 void OpenAPI::Time::Sleep(unsigned second)
