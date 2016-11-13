@@ -3,19 +3,19 @@
 #include <errno.h>
 #include <pthread.h>
 
-class OpenAPI::Lock::LockPrivate
+class OpenAPIxx::Lock::LockPrivate
 {
 public:
 	pthread_mutex_t mutex;
 };
 
-OpenAPI::Lock::Lock()
+OpenAPIxx::Lock::Lock()
 {
-	m_p = new OpenAPI::Lock::LockPrivate();
+	m_p = new OpenAPIxx::Lock::LockPrivate();
 	pthread_mutex_init(&(m_p->mutex), NULL);
 }
 
-OpenAPI::Lock::~Lock()
+OpenAPIxx::Lock::~Lock()
 {
 	if(m_p != NULL)
 	{
@@ -24,7 +24,7 @@ OpenAPI::Lock::~Lock()
 	}
 }
 
-int OpenAPI::Lock::lock()
+int OpenAPIxx::Lock::lock()
 {
 	if(m_p != NULL)
 	{
@@ -36,7 +36,7 @@ int OpenAPI::Lock::lock()
 	return OA_ERR_OPERATION_FAILED;
 }
 
-int OpenAPI::Lock::tryLock(bool& succeed)
+int OpenAPIxx::Lock::tryLock(bool& succeed)
 {
 	int ret = 0;
 	if(m_p != NULL)
@@ -57,7 +57,7 @@ int OpenAPI::Lock::tryLock(bool& succeed)
 	return OA_ERR_OPERATION_FAILED;
 }
 
-int OpenAPI::Lock::unlock()
+int OpenAPIxx::Lock::unlock()
 {
 	if(m_p != NULL)
 	{

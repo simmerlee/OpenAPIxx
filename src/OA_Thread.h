@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace OpenAPI
+namespace OpenAPIxx
 {
 
 class Thread
@@ -26,9 +26,9 @@ private:
 	ThreadPrivate* m_p;
 };
 
-}// OpenAPI
+}// OpenAPIxx
 
-typedef OpenAPI::Thread OAThread;
+typedef OpenAPIxx::Thread OAThread;
 
 #endif//_OPENAPI_THREAD_H_
 

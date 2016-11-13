@@ -1,7 +1,7 @@
 #ifndef _OPENAPI_LOCK_H_
 #define _OPENAPI_LOCK_H_
 
-namespace OpenAPI
+namespace OpenAPIxx
 {
 
 class Lock
@@ -21,6 +21,6 @@ private:
 
 }
 
-typedef OpenAPI::Lock OALock;
+typedef OpenAPIxx::Lock OALock;
 
 #endif//_OPENAPI_LOCK_H_

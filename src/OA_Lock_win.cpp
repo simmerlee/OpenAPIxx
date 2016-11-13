@@ -4,7 +4,7 @@
 #include <iostream>
 #include <Windows.h>
 
-class OpenAPI::Lock::LockPrivate
+class OpenAPIxx::Lock::LockPrivate
 {
 public:
 	LockPrivate():mutex(NULL), createFlag(false){}
@@ -13,13 +13,13 @@ public:
     bool createFlag;
 };
 
-OpenAPI::Lock::Lock():
+OpenAPIxx::Lock::Lock():
     m_p(NULL)
 {
-	m_p = new OpenAPI::Lock::LockPrivate();
+	m_p = new OpenAPIxx::Lock::LockPrivate();
 }
 
-OpenAPI::Lock::~Lock()
+OpenAPIxx::Lock::~Lock()
 {
 	if(m_p != NULL)
 	{
@@ -29,7 +29,7 @@ OpenAPI::Lock::~Lock()
 	}
 }
 
-int OpenAPI::Lock::create()
+int OpenAPIxx::Lock::create()
 {
     m_p->mutex = CreateMutex(NULL, FALSE, NULL);
     if (m_p->mutex != NULL)
@@ -38,7 +38,7 @@ int OpenAPI::Lock::create()
     return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::Lock::destroy()
+int OpenAPIxx::Lock::destroy()
 {
     if (m_p != NULL)
     {
@@ -53,7 +53,7 @@ int OpenAPI::Lock::destroy()
     return OA_ERR_OPERATION_FAILED;
 }
 
-int OpenAPI::Lock::lock()
+int OpenAPIxx::Lock::lock()
 {
 	if(m_p != NULL)
 	{
@@ -65,7 +65,7 @@ int OpenAPI::Lock::lock()
 	return OA_ERR_OPERATION_FAILED;
 }
 
-int OpenAPI::Lock::tryLock(bool& succeed)
+int OpenAPIxx::Lock::tryLock(bool& succeed)
 {
 	DWORD ret;
 	if(m_p != NULL)
@@ -87,7 +87,7 @@ int OpenAPI::Lock::tryLock(bool& succeed)
 	return OA_ERR_OPERATION_FAILED;
 }
 
-int OpenAPI::Lock::unlock()
+int OpenAPIxx::Lock::unlock()
 {
 	if(m_p != NULL)
 	{

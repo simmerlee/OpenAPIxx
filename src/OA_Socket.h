@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace OpenAPI
+namespace OpenAPIxx
 {
 
 class SocketFdSetPrivate;
@@ -81,11 +81,11 @@ public:
 	int recvfrom(char* buf, unsigned int bufSize, std::string* ip, unsigned int* port, unsigned int* receivedLength);
 };
 
-}// namespace OpenAPI
+}// namespace OpenAPIxx
 
-typedef OpenAPI::Socket OASocket;
-typedef OpenAPI::TCPSocket OATCPSocket;
-typedef OpenAPI::UDPSocket OAUDPSocket;
+typedef OpenAPIxx::Socket OASocket;
+typedef OpenAPIxx::TCPSocket OATCPSocket;
+typedef OpenAPIxx::UDPSocket OAUDPSocket;
 
 #endif//_OPENAPI_SOCKET_H_
 

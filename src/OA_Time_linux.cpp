@@ -6,21 +6,21 @@
 
 #define TIME_TO_STRING_BUFFER_EXTRAL_RESERVE_SIZE   64      // byte
 
-OpenAPI::Time::Time():m_ms(0){}
+OpenAPIxx::Time::Time():m_ms(0){}
 
-OpenAPI::Time::Time(unsigned long long millisecond):m_ms(millisecond){}
+OpenAPIxx::Time::Time(unsigned long long millisecond):m_ms(millisecond){}
 
-unsigned int OpenAPI::Time::toSecond() const
+unsigned int OpenAPIxx::Time::toSecond() const
 {
     return (unsigned int)(m_ms / 1000LL);
 }
 
-unsigned long long OpenAPI::Time::toMillisecond() const
+unsigned long long OpenAPIxx::Time::toMillisecond() const
 {
     return m_ms;
 }
 
-int OpenAPI::Time::toString(const std::string& format, 
+int OpenAPIxx::Time::toString(const std::string& format, 
                             std::string& output) const
 {
     unsigned bufSize = format.size() 
@@ -41,7 +41,7 @@ int OpenAPI::Time::toString(const std::string& format,
     return ret;
 }
 
-int OpenAPI::Time::toTimeval(timeval* tv) const
+int OpenAPIxx::Time::toTimeval(timeval* tv) const
 {
 	if (tv == NULL)
 		return OA_ERR_ILLEGAL_ARG;
@@ -51,7 +51,7 @@ int OpenAPI::Time::toTimeval(timeval* tv) const
 	return OA_ERR_NO_ERROR;
 }
 
-OpenAPI::Time OpenAPI::Time::CurrentLocalTime()
+OpenAPIxx::Time OpenAPIxx::Time::CurrentLocalTime()
 {
     timeval tv;
     ::gettimeofday(&tv, NULL);
@@ -61,24 +61,24 @@ OpenAPI::Time OpenAPI::Time::CurrentLocalTime()
     return Time(ms);
 }
 
-OpenAPI::Time OpenAPI::Time::TickCount64()
+unsigned long long OpenAPIxx::Time::TickCount64()
 {
     struct timespec ts;
     ::clock_gettime(CLOCK_MONOTONIC, &ts);
     return (ts.tv_sec * 1000ULL + ts.tv_nsec / 1000000ULL);
 }
 
-void OpenAPI::Time::Sleep(unsigned second)
+void OpenAPIxx::Time::Sleep(unsigned second)
 {
     ::sleep(second);
 }
 
-void OpenAPI::Time::Msleep(unsigned millisecond)
+void OpenAPIxx::Time::Msleep(unsigned millisecond)
 {
     ::usleep(millisecond * 1000);
 }
 
-int OpenAPI::Time::SetTimeval(unsigned millisecond, timeval* tv)
+int OpenAPIxx::Time::SetTimeval(unsigned millisecond, timeval* tv)
 {
 	if (tv == NULL)
 		return OA_ERR_ILLEGAL_ARG;

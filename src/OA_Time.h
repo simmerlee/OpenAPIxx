@@ -5,7 +5,7 @@
 
 struct timeval;
 
-namespace OpenAPI
+namespace OpenAPIxx
 {
 
 class Time
@@ -29,6 +29,6 @@ private:
 
 }// namespace
 
-typedef OpenAPI::Time OATime;
+typedef OpenAPIxx::Time OATime;
 
 #endif//_OPENAPI_TIME_H_

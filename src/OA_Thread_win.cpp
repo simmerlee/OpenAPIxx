@@ -32,7 +32,7 @@ void SetThreadName(DWORD dwThreadID, LPCSTR szThreadName)
 	}
 }
 
-class OpenAPI::Thread::ThreadPrivate
+class OpenAPIxx::Thread::ThreadPrivate
 {
 public:
 	ThreadPrivate() : threadHandle(NULL){}
@@ -50,19 +50,19 @@ public:
 	string threadName;
 };
 
-OpenAPI::Thread::Thread():
+OpenAPIxx::Thread::Thread():
 	m_p(NULL)
 {
 	m_p = new ThreadPrivate();
 }
 
-OpenAPI::Thread::Thread(const std::string& threadName):
+OpenAPIxx::Thread::Thread(const std::string& threadName):
 	m_p(NULL)
 {
 	m_p = new ThreadPrivate(threadName);
 }
 
-OpenAPI::Thread::~Thread()
+OpenAPIxx::Thread::~Thread()
 {
 	if(m_p != NULL)
 	{
@@ -72,7 +72,7 @@ OpenAPI::Thread::~Thread()
 	}
 }
 
-int OpenAPI::Thread::start()
+int OpenAPIxx::Thread::start()
 {
 	if (m_p == NULL)
 		return OA_ERR_OPERATION_FAILED;
@@ -89,7 +89,7 @@ int OpenAPI::Thread::start()
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::Thread::join()
+int OpenAPIxx::Thread::join()
 {
 	if (m_p == NULL)
 		return OA_ERR_OPERATION_FAILED;
@@ -100,7 +100,7 @@ int OpenAPI::Thread::join()
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::Thread::setThreadName(const std::string& threadName)
+int OpenAPIxx::Thread::setThreadName(const std::string& threadName)
 {
 	if (m_p == NULL)
 		return OA_ERR_OPERATION_FAILED;
@@ -111,7 +111,7 @@ int OpenAPI::Thread::setThreadName(const std::string& threadName)
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::Thread::getThreadName(std::string& threadName)
+int OpenAPIxx::Thread::getThreadName(std::string& threadName)
 {
 	if (m_p == NULL)
 		return OA_ERR_OPERATION_FAILED;
@@ -120,7 +120,7 @@ int OpenAPI::Thread::getThreadName(std::string& threadName)
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::Thread::getThreadId(unsigned int& threadId)
+int OpenAPIxx::Thread::getThreadId(unsigned int& threadId)
 {
 	if (m_p == NULL)
 		return OA_ERR_OPERATION_FAILED;
@@ -129,9 +129,9 @@ int OpenAPI::Thread::getThreadId(unsigned int& threadId)
 	return OA_ERR_NO_ERROR;
 }
 
-void OpenAPI::Thread::run() {}
+void OpenAPIxx::Thread::run() {}
 
-unsigned int OpenAPI::Thread::GetCurrentThreadId()
+unsigned int OpenAPIxx::Thread::GetCurrentThreadId()
 {
 	return ::GetCurrentThreadId();
 }

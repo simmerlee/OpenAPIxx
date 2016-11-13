@@ -65,7 +65,7 @@ public:
     static bool IsLittleEndian() { return byteOrderUnionData.data.data1 != 1; }
 };
 
-namespace OpenAPI
+namespace OpenAPIxx
 {
 class SocketFdSetPrivate
 {
@@ -77,61 +77,61 @@ public:
 };
 }
 
-OpenAPI::SocketFdSet::SocketFdSet()
+OpenAPIxx::SocketFdSet::SocketFdSet()
 {
     m_p = new SocketFdSetPrivate();
 }
 
-OpenAPI::SocketFdSet::~SocketFdSet()
+OpenAPIxx::SocketFdSet::~SocketFdSet()
 {
     delete m_p;
 }
 
-void OpenAPI::SocketFdSet::clear()
+void OpenAPIxx::SocketFdSet::clear()
 {
     FD_ZERO(&(m_p->fdSet));
 }
 
-void OpenAPI::SocketFdSet::set(int fd)
+void OpenAPIxx::SocketFdSet::set(int fd)
 {
     FD_SET(fd, &(m_p->fdSet));
     if(fd > m_p->maxFd)
         m_p->maxFd = fd;
 }
 
-bool OpenAPI::SocketFdSet::isSet(int fd)
+bool OpenAPIxx::SocketFdSet::isSet(int fd)
 {
     if(FD_ISSET(fd, &(m_p->fdSet)) == 0)
         return false; 
     return true;
 }
 
-void* OpenAPI::SocketFdSet::getData()
+void* OpenAPIxx::SocketFdSet::getData()
 {
     return &(m_p->fdSet);
 }
 
-int OpenAPI::SocketFdSet::getMaxFd()
+int OpenAPIxx::SocketFdSet::getMaxFd()
 {
     return m_p->maxFd;
 }
 
-OpenAPI::Socket::Socket() :
+OpenAPIxx::Socket::Socket() :
 	m_socketFd(OA_SOCKET_INVALIDE_SOCKET_FD),
 	m_errno(0)
 {}
 
-OpenAPI::Socket::Socket(int socketFd) :
+OpenAPIxx::Socket::Socket(int socketFd) :
 	m_socketFd(socketFd),
 	m_errno(0)
 {}
 
-OpenAPI::Socket::~Socket()
+OpenAPIxx::Socket::~Socket()
 {
 	close();
 }
 
-int OpenAPI::Socket::bind(unsigned int port)
+int OpenAPIxx::Socket::bind(unsigned int port)
 {
 	if ((port & MAX_PORT_MASK) != 0)
 		return OA_ERR_ILLEGAL_ARG;
@@ -152,7 +152,7 @@ int OpenAPI::Socket::bind(unsigned int port)
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::Socket::connect(const std::string& ip, unsigned int port)
+int OpenAPIxx::Socket::connect(const std::string& ip, unsigned int port)
 {
 	if ((port & MAX_PORT_MASK) != 0 || ip.empty())
 		return OA_ERR_ILLEGAL_ARG;
@@ -171,7 +171,7 @@ int OpenAPI::Socket::connect(const std::string& ip, unsigned int port)
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::Socket::send(const char* buf, 
+int OpenAPIxx::Socket::send(const char* buf, 
                           unsigned int length, 
                           unsigned int* sentLength)
 {
@@ -191,7 +191,7 @@ int OpenAPI::Socket::send(const char* buf,
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::Socket::recv(char* buf, unsigned int bufSize, 
+int OpenAPIxx::Socket::recv(char* buf, unsigned int bufSize, 
                           unsigned int* receivedLength)
 {
 	if (buf == NULL || bufSize == 0)
@@ -210,7 +210,7 @@ int OpenAPI::Socket::recv(char* buf, unsigned int bufSize,
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::Socket::close()
+int OpenAPIxx::Socket::close()
 {
 	if (m_socketFd != OA_SOCKET_INVALIDE_SOCKET_FD)
 	{
@@ -229,7 +229,7 @@ int OpenAPI::Socket::close()
 		return OA_ERR_OPERATION_FAILED;
 }
 
-int OpenAPI::Socket::setNoneBlockModel(bool flag)
+int OpenAPIxx::Socket::setNoneBlockModel(bool flag)
 {
 	int ret;
 	unsigned long value;
@@ -246,7 +246,7 @@ int OpenAPI::Socket::setNoneBlockModel(bool flag)
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::Socket::setSendBufferSize(unsigned int size)
+int OpenAPIxx::Socket::setSendBufferSize(unsigned int size)
 {
 	if (size == 0)
 		return OA_ERR_ILLEGAL_ARG;
@@ -262,7 +262,7 @@ int OpenAPI::Socket::setSendBufferSize(unsigned int size)
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::Socket::setRecvBufferSize(unsigned int size)
+int OpenAPIxx::Socket::setRecvBufferSize(unsigned int size)
 {
 	if (size == 0)
 		return OA_ERR_ILLEGAL_ARG;
@@ -278,7 +278,7 @@ int OpenAPI::Socket::setRecvBufferSize(unsigned int size)
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::Socket::setSendTimeout(unsigned int timeoutMs)
+int OpenAPIxx::Socket::setSendTimeout(unsigned int timeoutMs)
 {
 	if (timeoutMs == 0)
 		return OA_ERR_ILLEGAL_ARG;
@@ -295,7 +295,7 @@ int OpenAPI::Socket::setSendTimeout(unsigned int timeoutMs)
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::Socket::setRecvTimeout(unsigned int timeoutMs)
+int OpenAPIxx::Socket::setRecvTimeout(unsigned int timeoutMs)
 {
 	if (timeoutMs == 0)
 		return OA_ERR_ILLEGAL_ARG;
@@ -312,22 +312,22 @@ int OpenAPI::Socket::setRecvTimeout(unsigned int timeoutMs)
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::Socket::getLastError() const
+int OpenAPIxx::Socket::getLastError() const
 {
 	return m_errno;
 }
 
-void OpenAPI::Socket::setSocketFd(int socketFd)
+void OpenAPIxx::Socket::setSocketFd(int socketFd)
 {
 	m_socketFd = socketFd;
 }
 
-int OpenAPI::Socket::getSocketFd() const
+int OpenAPIxx::Socket::getSocketFd() const
 {
 	return m_socketFd;
 }
 
-int OpenAPI::Socket::Select(SocketFdSet* readSet, 
+int OpenAPIxx::Socket::Select(SocketFdSet* readSet, 
                             SocketFdSet* writeSet, 
                             SocketFdSet* exceptSet, 
                             unsigned int timeout,
@@ -340,7 +340,7 @@ int OpenAPI::Socket::Select(SocketFdSet* readSet,
     if(writeSet != NULL)    wSet = static_cast<fd_set*>(writeSet->getData());
     if(exceptSet != NULL)   eSet = static_cast<fd_set*>(exceptSet->getData());
     timeval tv;
-    OpenAPI::Time::SetTimeval(timeout, &tv);
+    OpenAPIxx::Time::SetTimeval(timeout, &tv);
 
     int maxFd = 0;
     int ret = ::select(maxFd + 1, rSet, wSet, eSet, &tv);
@@ -354,12 +354,12 @@ int OpenAPI::Socket::Select(SocketFdSet* readSet,
     }
 }
 
-unsigned short OpenAPI::Socket::ntoh16(unsigned short num) { return ntohs(num); }
-unsigned short OpenAPI::Socket::hton16(unsigned short num) { return htons(num); }
-unsigned int OpenAPI::Socket::ntoh32(unsigned int num) { return ntohl(num); }
-unsigned int OpenAPI::Socket::hton32(unsigned int num) { return htonl(num); }
+unsigned short OpenAPIxx::Socket::ntoh16(unsigned short num) { return ntohs(num); }
+unsigned short OpenAPIxx::Socket::hton16(unsigned short num) { return htons(num); }
+unsigned int OpenAPIxx::Socket::ntoh32(unsigned int num) { return ntohl(num); }
+unsigned int OpenAPIxx::Socket::hton32(unsigned int num) { return htonl(num); }
 
-inline unsigned long long OpenAPI::Socket::ntoh64(unsigned long long num)
+inline unsigned long long OpenAPIxx::Socket::ntoh64(unsigned long long num)
 {
     if (ByteOrder::IsLittleEndian() == true)
     {
@@ -373,18 +373,18 @@ inline unsigned long long OpenAPI::Socket::ntoh64(unsigned long long num)
     return num;
 }
 
-unsigned long long OpenAPI::Socket::hton64(unsigned long long num)
+unsigned long long OpenAPIxx::Socket::hton64(unsigned long long num)
 {
     return ntoh64(num);
 }
 
-OpenAPI::TCPSocket::TCPSocket() {}
+OpenAPIxx::TCPSocket::TCPSocket() {}
 
-OpenAPI::TCPSocket::TCPSocket(int socketFd) :
+OpenAPIxx::TCPSocket::TCPSocket(int socketFd) :
 	Socket(socketFd)
 {}
 
-int OpenAPI::TCPSocket::create()
+int OpenAPIxx::TCPSocket::create()
 {
 	m_socketFd = ::socket(AF_INET, SOCK_STREAM, 0);
 	if (m_socketFd == -1)
@@ -395,7 +395,7 @@ int OpenAPI::TCPSocket::create()
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::TCPSocket::listen(int backlog)
+int OpenAPIxx::TCPSocket::listen(int backlog)
 {
 	if (backlog <= 0)
 		return OA_ERR_ILLEGAL_ARG;
@@ -408,7 +408,7 @@ int OpenAPI::TCPSocket::listen(int backlog)
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::TCPSocket::accept(TCPSocket*& clientSocket, 
+int OpenAPIxx::TCPSocket::accept(TCPSocket*& clientSocket, 
                                std::string* ip, 
                                unsigned int* port)
 {
@@ -434,13 +434,13 @@ int OpenAPI::TCPSocket::accept(TCPSocket*& clientSocket,
 	return OA_ERR_NO_ERROR;
 }
 
-OpenAPI::UDPSocket::UDPSocket() {}
+OpenAPIxx::UDPSocket::UDPSocket() {}
 
-OpenAPI::UDPSocket::UDPSocket(int socketFd) :
+OpenAPIxx::UDPSocket::UDPSocket(int socketFd) :
 	Socket(socketFd)
 {}
 
-int OpenAPI::UDPSocket::create()
+int OpenAPIxx::UDPSocket::create()
 {
 	m_socketFd = ::socket(AF_INET, SOCK_DGRAM, 0);
 	if (m_socketFd == -1)
@@ -451,7 +451,7 @@ int OpenAPI::UDPSocket::create()
 	return OA_ERR_NO_ERROR;
 }
 
-int OpenAPI::UDPSocket::sendto(const char* buf, unsigned int length, 
+int OpenAPIxx::UDPSocket::sendto(const char* buf, unsigned int length, 
 						       const std::string& ip, unsigned int port, 
                                unsigned int *sentLength)
 {
@@ -479,7 +479,7 @@ int OpenAPI::UDPSocket::sendto(const char* buf, unsigned int length,
 	return OA_ERR_SYSTEM_CALL_FAILED;
 }
 
-int OpenAPI::UDPSocket::recvfrom(char* buf, unsigned int bufSize, 
+int OpenAPIxx::UDPSocket::recvfrom(char* buf, unsigned int bufSize, 
                                  std::string* ip, unsigned int* port, 
                                  unsigned int* receivedLength)
 {
