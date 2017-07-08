@@ -1,11 +1,11 @@
-#ifndef _OPENAPIXX_WORKER_THREAD_H_
+ï»¿#ifndef _OPENAPIXX_WORKER_THREAD_H_
 #define _OPENAPIXX_WORKER_THREAD_H_
 
 #include "OA_Thread.h"
 
-namespace OpenAPIxx {
+namespace OpenAPI {
 
-class WorkerThread : public OpenAPIxx::Thread
+class WorkerThread : public OAThread
 {
 public:
     WorkerThread();
@@ -15,19 +15,19 @@ public:
     inline void setExitFlagTrue() { m_exitFlag = true; }
     inline void setPauseFlagTrue() { m_pauseFlag = true; }
     inline void setPauseFlagFalse() { m_pauseFlag = false; }
-    void waitPaused();  // puasedFlagÖÃéÕæºó£¬µÈ´ı¾€³ÌÕæÕı•ºÍ£
+    void waitPaused();  // puasedFlagç½®ç‚ºçœŸåï¼Œç­‰å¾…ç·šç¨‹çœŸæ­£æš«åœ
     inline bool shouldExit() { return m_exitFlag; }
 protected:
     bool shouldKeepRunning();
     void sleepUnlessExit(unsigned int time);
 private:
-    volatile bool m_exitFlag;       // ÊÇ·ñĞèÒªÍË³ö
-    volatile bool m_pauseFlag;      // ÊÇ·ñĞèÒª•ºÍ£
-    volatile bool m_pausedFlag;     // ÊÇ·ñÒÑ½›•ºÍ£
+    volatile bool m_exitFlag;       // æ˜¯å¦éœ€è¦é€€å‡º
+    volatile bool m_pauseFlag;      // æ˜¯å¦éœ€è¦æš«åœ
+    volatile bool m_pausedFlag;     // æ˜¯å¦å·²ç¶“æš«åœ
 };
 
-}// namespace OpenAPIxx
+}// namespace OpenAPI
 
-typedef OpenAPIxx::WorkerThread OAWorkerThread;
+typedef OpenAPI::WorkerThread OAWorkerThread;
 
 #endif//_OPENAPIXX_WORKER_THREAD_H_
