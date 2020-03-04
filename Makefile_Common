@@ -1,0 +1,13 @@
+export ROOT_DIR = $(shell pwd)
+export INC_DIR = $(shell pwd)/include
+export SRC_DIR = $(shell pwd)/src
+export OUT_DIR = $(shell pwd)/output
+
+all:
+	mkdir -p $(OUT_DIR)
+	make -C src
+
+.PHONYY : clean
+clean:
+	rm -rf $(OUT_DIR)
+

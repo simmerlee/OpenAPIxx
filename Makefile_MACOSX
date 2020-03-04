@@ -1,0 +1,8 @@
+﻿export PLATFORM = OA_PLT_MACOSX
+
+all:
+	make -f Makefile_Common
+
+.PHONYY : clean
+clean:
+	make clean -f Makefile_Common
