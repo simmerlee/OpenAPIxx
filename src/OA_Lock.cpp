@@ -21,7 +21,7 @@ public:
 	pthread_mutex_t mutex;
 #endif//OA_PLT_UNIX_FAMILY
 
-	int32_t errnum;
+	int errnum;
 };
 
 OpenAPIxx::Lock::Lock():
@@ -38,7 +38,7 @@ OpenAPIxx::Lock::~Lock()
 	}
 }
 
-int32_t OpenAPIxx::Lock::create()
+int OpenAPIxx::Lock::create()
 {
 	LockPrivate* lp = reinterpret_cast<LockPrivate*>(m_p);
 	if (lp == NULL) {
@@ -58,7 +58,7 @@ int32_t OpenAPIxx::Lock::create()
     return OA_ERR_NO_ERROR;
 }
 
-int32_t OpenAPIxx::Lock::destroy()
+int OpenAPIxx::Lock::destroy()
 {
 	LockPrivate* lp = reinterpret_cast<LockPrivate*>(m_p);
 	if (lp == NULL) {
@@ -85,7 +85,7 @@ int32_t OpenAPIxx::Lock::destroy()
 	return OA_ERR_NO_ERROR;
 }
 
-int32_t OpenAPIxx::Lock::lock()
+int OpenAPIxx::Lock::lock()
 {
 	LockPrivate* lp = reinterpret_cast<LockPrivate*>(m_p);
 	if (lp == NULL) {
@@ -122,7 +122,7 @@ int32_t OpenAPIxx::Lock::lock()
 #endif//OA_PLT_UNIX_FAMILY
 }
 
-int32_t OpenAPIxx::Lock::tryLock(bool& succeed)
+int OpenAPIxx::Lock::tryLock(bool& succeed)
 {
 	LockPrivate* lp = reinterpret_cast<LockPrivate*>(m_p);
 	if (lp == NULL) {
@@ -164,7 +164,7 @@ int32_t OpenAPIxx::Lock::tryLock(bool& succeed)
 #endif//OA_PLT_UNIX_FAMILY
 }
 
-int32_t OpenAPIxx::Lock::unlock()
+int OpenAPIxx::Lock::unlock()
 {
 	LockPrivate* lp = reinterpret_cast<LockPrivate*>(m_p);
 	if (lp == NULL) {
@@ -190,6 +190,169 @@ int32_t OpenAPIxx::Lock::unlock()
 	return OA_ERR_NO_ERROR;
 }
 
-int32_t OpenAPIxx::Lock::getLastError() {
+int OpenAPIxx::Lock::getLastError() {
 	return reinterpret_cast<LockPrivate*>(m_p)->errnum;
+}
+
+class SpinLockPrivate
+{
+public:
+#ifdef OA_PLT_WINDOWS
+    CRITICAL_SECTION criticalSection;
+#endif//OA_PLT_WINDOWS
+#ifdef OA_PLT_UNIX_FAMILY
+    pthread_spinlock_t  spinLock;
+#endif//OA_PLT_UNIX_FAMILY
+
+    int errnum;
+};
+
+#ifdef OA_PLT_WINDOWS
+#define OA_SPINLOCK_CS_SPINCOUNT		(0xffffffff)
+#endif
+
+OpenAPIxx::SpinLock::SpinLock():m_p(NULL) {
+    m_p = reinterpret_cast<void*>(new SpinLockPrivate());
+}
+
+OpenAPIxx::SpinLock::~SpinLock() {
+    delete reinterpret_cast<SpinLockPrivate*>(m_p);
+}
+
+int OpenAPIxx::SpinLock::create() {
+    int ret;
+    SpinLockPrivate* sp = reinterpret_cast<SpinLockPrivate*>(m_p);
+
+#ifdef OA_PLT_WINDOWS
+    ret = InitializeCriticalSectionAndSpinCount(
+            &(sp->criticalSection), OA_SPINLOCK_CS_SPINCOUNT);
+
+    // This function always returns a nonzero value.
+    // On Windows Server 2003 and Windows XP
+    // If the function fails, the return value is zero (0).
+    // by MSDN
+
+    if (ret == 0) {
+        sp->errnum = GetLastError();
+        return OA_ERR_SYSTEM_CALL_FAILED;
+    }
+#endif//OA_PLT_WINDOWS
+#ifdef OA_PLT_UNIX_FAMILY
+    ret = pthread_spin_init(
+        &(sp->spinLock), PTHREAD_PROCESS_PRIVATE);
+    if (ret != 0) {
+        sp->errnum = ret;
+        return OA_ERR_SYSTEM_CALL_FAILED;
+    }
+#endif//OA_PLT_UNIX_FAMILY
+
+return OA_ERR_NO_ERROR;
+}
+
+int OpenAPIxx::SpinLock::destroy() {
+    SpinLockPrivate* sp = reinterpret_cast<SpinLockPrivate*>(m_p);
+    if (sp == NULL) {
+        return OA_ERR_OPERATION_FAILED;
+    }
+
+#ifdef OA_PLT_WINDOWS
+    DeleteCriticalSection(&(sp->criticalSection));
+#endif//OA_PLT_WINDOWS
+#ifdef OA_PLT_UNIX_FAMILY
+    int ret;
+    ret = pthread_spin_destroy(&(sp->spinLock));
+    if (ret != 0) {
+        sp->errnum = ret;
+        return OA_ERR_SYSTEM_CALL_FAILED;
+    }
+#endif//OA_PLT_UNIX_FAMILY
+
+    return OA_ERR_NO_ERROR;
+}
+
+int OpenAPIxx::SpinLock::lock() {
+    SpinLockPrivate* sp = reinterpret_cast<SpinLockPrivate*>(m_p);
+    if (sp == NULL) {
+        return OA_ERR_OPERATION_FAILED;
+    }
+
+#ifdef OA_PLT_WINDOWS
+    EnterCriticalSection(&(sp->criticalSection));
+#endif//OA_PLT_WINDOWS
+#ifdef OA_PLT_UNIX_FAMILY
+    int ret;
+    ret = pthread_spin_lock(&(sp->spinLock));
+    if (ret != 0) {
+        sp->errnum = ret;
+        return OA_ERR_SYSTEM_CALL_FAILED;
+    }
+#endif//OA_PLT_UNIX_FAMILY
+
+    return OA_ERR_NO_ERROR;
+}
+
+int OpenAPIxx::SpinLock::tryLock(bool& succeed) {
+    SpinLockPrivate* sp = reinterpret_cast<SpinLockPrivate*>(m_p);
+    if (sp == NULL) {
+        return OA_ERR_OPERATION_FAILED;
+    }
+
+#ifdef OA_PLT_WINDOWS
+    BOOL ret;
+    ret = TryEnterCriticalSection(&(sp->criticalSection));
+    if (ret != 0) {
+        succeed = true;
+    }
+    else {
+        succeed = false;
+    }
+#endif//OA_PLT_WINDOWS
+#ifdef OA_PLT_UNIX_FAMILY
+    int ret;
+    ret = pthread_spin_trylock(&(sp->spinLock));
+    if (ret != 0
+        && ret != EDEADLK
+        && ret != EBUSY) {
+        sp->errnum = ret;
+        return OA_ERR_SYSTEM_CALL_FAILED;
+    }
+    if (ret == 0) {
+        succeed = true;
+    }
+    else {
+        succeed = false;
+    }
+#endif//OA_PLT_UNIX_FAMILY
+
+    return OA_ERR_NO_ERROR;
+}
+
+int OpenAPIxx::SpinLock::unlock() {
+    SpinLockPrivate* sp = reinterpret_cast<SpinLockPrivate*>(m_p);
+    if (sp == NULL) {
+        return OA_ERR_OPERATION_FAILED;
+    }
+
+#ifdef OA_PLT_WINDOWS
+    LeaveCriticalSection(&(sp->criticalSection));
+#endif//OA_PLT_WINDOWS
+#ifdef OA_PLT_UNIX_FAMILY
+    int ret;
+    ret = pthread_spin_unlock(&(sp->spinLock));
+    if (ret != 0) {
+        sp->errnum = ret;
+        return OA_ERR_SYSTEM_CALL_FAILED;
+    }
+#endif//OA_PLT_UNIX_FAMILY
+
+    return OA_ERR_NO_ERROR;
+}
+
+int OpenAPIxx::SpinLock::getLastError() {
+    SpinLockPrivate* sp = reinterpret_cast<SpinLockPrivate*>(m_p);
+    if (sp == NULL) {
+        return OA_ERR_OPERATION_FAILED;
+    }
+
+    return sp->errnum;
 }

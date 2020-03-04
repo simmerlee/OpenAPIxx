@@ -1,2 +1,36 @@
-# OpenAPIxx
-Cross platform API for C++ based on STL
+#OpenAPIxx
+
+OpenAPIxx是一個輕量級、跨平台的C++庫，為開發者提供系統相關操作的友好、簡單、可依賴的編程接口。OpenAPIxx是基於C++ STL，C標準庫和操作系統的本地方法實現的。沒有使用異常、RTTI、C++11等特性。包括的功能有：
+
+ - 進程操作 **未完成**
+ - 線程操作
+ - 互斥鎖，（讀寫鎖 **未完成**）
+ - Socket
+ - 時間
+ - 文件和文件夾操作 **未完成**
+ - 平台無關的常用組件 **未完成**
+
+平台無關的組件包括：
+
+ - JSON
+ - md5
+ - UUID
+ - 加密與解密
+ - 壓縮與解壓縮
+
+###編譯方法
+編譯時需要向編譯器傳入使用平台的宏定義，并設置為1，例如在`g++`中可以這樣做：`-D OA_PLT_LINUX=1`。支持的平台對應的宏定義如下：
+
+    OA_PLT_WINDOWS
+    OA_PLT_LINUX
+    OA_PLT_MACOSX
+
+###鏈接事項
+ - 在Windows平台下如果使用Socket相關的功能需要連接`ws2_32`庫
+ - 在Linux平台下使用Thread、Lock相關的功能需要使用`-lpthread`選項。
+ - 在CentOS平台下使用Time相關的功能需要使用`-lrt`選項。
+
+###注意事項
+ - 相同的功能在不同的平台上的特性有可能不一樣，請閱讀源代碼以避免錯誤。
+
+

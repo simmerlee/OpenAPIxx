@@ -231,7 +231,7 @@ int OpenAPIxx::Socket::connect(const std::string & ip,
 {
     int ret;
     OASelector selector;
-    uint32_t readyCount;
+    size_t readyCount;
 
     this->setNoneBlockModel(true);
     // 非阻塞connect一般都會失敗
