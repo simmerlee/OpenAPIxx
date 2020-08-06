@@ -18,11 +18,9 @@ OpenAPI::WorkerThread::WorkerThread(const std::string& threadName) :
     m_pausedFlag(false)
 {}
 
-OpenAPI::WorkerThread::~WorkerThread()
-{}
+OpenAPI::WorkerThread::~WorkerThread() {}
 
-void OpenAPI::WorkerThread::run()
-{}
+int OpenAPI::WorkerThread::run() { return 0; }
 
 void OpenAPI::WorkerThread::waitPaused()
 {

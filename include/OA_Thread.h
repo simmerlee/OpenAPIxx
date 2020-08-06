@@ -16,7 +16,7 @@ public:
 	Thread();
 	explicit Thread(const std::string& threadName);
 	virtual ~Thread();
-	virtual void run();
+	virtual int run();
 	int32_t start();
     int32_t join();
     int32_t setThreadName(const std::string& threadName);

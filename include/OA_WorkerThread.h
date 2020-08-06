@@ -11,7 +11,7 @@ public:
     WorkerThread();
     WorkerThread(const std::string& threadName);
     virtual ~WorkerThread();
-    virtual void run();
+    virtual int run();
     inline void setExitFlagTrue() { m_exitFlag = true; }
     inline void setPauseFlagTrue() { m_pauseFlag = true; }
     inline void setPauseFlagFalse() { m_pauseFlag = false; }

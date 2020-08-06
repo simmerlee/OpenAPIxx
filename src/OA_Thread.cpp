@@ -75,7 +75,7 @@ OpenAPIxx::Thread::~Thread() {
     }
 }
 
-void OpenAPIxx::Thread::run() {}
+int OpenAPIxx::Thread::run() { return 0; }
 
 int32_t OpenAPIxx::Thread::start()
 {
